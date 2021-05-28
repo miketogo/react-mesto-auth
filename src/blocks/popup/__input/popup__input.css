@@ -1,0 +1,39 @@
+.popup__input{
+  background-color: unset;
+  font: unset;
+  text-rendering: unset;
+  letter-spacing: unset;
+  word-spacing: unset;
+  text-transform: unset;
+  text-indent: unset;
+  text-shadow: unset;
+  display: unset;
+  text-align: unset;
+  appearance: unset;
+  font-family: 'Inter', Arial, sans-serif;
+  margin-top: 30px;
+  width: 358px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  padding: 0 0 13px;
+  color: #000000;
+  outline: none;
+}
+.popup__input:focus {
+  border: 1px solid #000000;
+}
+.popup__input:first-child{
+  margin-top: 54px;
+}
+@media screen and (max-width:905px){
+  .popup__input{
+    width: 100%;
+  }
+  .popup__input:first-child{
+    margin-top: 75px;
+  }
+}

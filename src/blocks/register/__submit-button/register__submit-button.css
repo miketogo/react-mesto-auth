@@ -1,0 +1,26 @@
+.register__submit-button{
+  width: 358px;
+  height: 50px;
+  background: #FFFFFF;
+border-radius: 2px;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 22px;
+/* identical to box height */
+text-decoration: none;
+text-align: center;
+transition: opacity 0.3s ease-in-out;
+color: #000000;
+cursor: pointer;
+border: none;
+padding: 0;
+margin-top: 216px;
+}
+
+.register__submit-button:focus {
+  outline: none;
+}
+.register__submit-button:hover {
+  opacity: 0.8;
+}

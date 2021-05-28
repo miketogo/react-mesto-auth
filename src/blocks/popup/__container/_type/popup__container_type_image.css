@@ -1,0 +1,10 @@
+.popup__container_type_image{
+  background: none;
+  box-shadow: none;
+  border-radius: unset;
+  align-items: unset;
+  margin: 0;
+  z-index: 11;
+  width: unset;
+  /* position: relative; */
+}

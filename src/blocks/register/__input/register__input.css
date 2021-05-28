@@ -1,0 +1,30 @@
+.register__input{
+  background-color: unset;
+  font: unset;
+  text-rendering: unset;
+  letter-spacing: unset;
+  word-spacing: unset;
+  text-transform: unset;
+  text-indent: unset;
+  text-shadow: unset;
+  display: unset;
+  text-align: unset;
+  appearance: unset;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  border: none;
+  border-bottom: 2px solid #CCCCCC;
+  color: #CCCCCC;
+  padding: 0 0 13px 1px;
+  margin-top: 30px;
+  transition: border-bottom 0.3s ease-in-out;
+}
+.register__input:focus {
+  outline: none;
+  border-bottom: 2px solid #fff;
+}
+.register__input:first-child{
+  margin-top: 0;
+}

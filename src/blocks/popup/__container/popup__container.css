@@ -1,0 +1,20 @@
+.popup__container{
+  cursor: default;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  width: 430px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  z-index: 11;
+}
+@media screen and (max-width:905px){
+  .popup__container{
+    width: 100%;
+    max-width: calc(100% - 19px * 2);
+
+  }
+}

@@ -1,0 +1,21 @@
+.popup{
+  z-index: 14;
+  font-family: 'Inter', Arial, sans-serif;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.5s, opacity 0.5s linear;
+}
+/* .stop-scrolling{
+  height: 100%;
+  overflow: hidden;
+} */
+
