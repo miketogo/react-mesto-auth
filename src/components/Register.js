@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import authApi from '../utils/authApi';
 
 class Register extends React.Component {
   constructor(props) {
@@ -21,20 +20,7 @@ class Register extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault()
-    authApi.register(this.state.email, this.state.password).then((res) => {
-      this.props.handleRegResult(res.status)
-      if (res.ok) {
-        if (res.status === 201) {
-          this.props.history.push('/sign-in')
-          return res.json();
-        }
-      }
-    }).then((data) => {
-      console.log(data.data.email)
-      localStorage.setItem('regEmail', data.data.email)
-      return data
-    }).catch((err) => console.log(err));
-    console.log(this.state)
+    this.props.onRegister(this.state.email, this.state.password)
     // здесь авторизуем пользователя
     // далее проверяем токен
     // наконец, перенаправляем пользователя на страницу `/ducks`

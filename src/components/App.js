@@ -21,30 +21,30 @@ import authApi from '../utils/authApi';
 
 
 function App(props) {
-  const [editProfilePopupOpen, isEditProfilePopupOpen] = React.useState(false);
-  const [editAvatarPopupOpen, isEditAvatarPopupOpen] = React.useState(false);
-  const [addPlacePopupOpen, isAddPlacePopupOpen] = React.useState(false);
-  const [infoTooltipPopupOpen, isInfoTooltipPopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+  const [isInfoTooltipPopupOpen, setInfoTooltipPopupOpen] = React.useState(false);
   const [selectCard, selectedCard] = React.useState(null);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState(null);
   const [regResult, setRegResult] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState('');
 
   React.useEffect(() => {
-    if (localStorage.getItem('jwt')) {
+    const jwt = localStorage.getItem("jwt");
+
+    if (jwt) {
       let jwt = localStorage.getItem('jwt');
       authApi.jwtCheck(jwt).then((res) => {
-        if (res) {
-          console.log(res)
-          localStorage.setItem('_id', res.data._id);
-          localStorage.setItem('email', res.data.email);
-          // авторизуем пользователя
-          setLoggedIn(true)
-          props.history.push("/");
-
-          return res
-        }
+        console.log(res)
+        localStorage.setItem('_id', res.data._id);
+        localStorage.setItem('email', res.data.email);
+        setUserEmail(res.data.email)
+        // авторизуем пользователя
+        setLoggedIn(true)
+        props.history.push("/");
       });
     };
   }, [])
@@ -77,23 +77,23 @@ function App(props) {
   }
 
   function handleEditAvatarClick() {
-    isEditAvatarPopupOpen(true)
+    setEditAvatarPopupOpen(true)
   }
   function handleEditProfileClick() {
-    isEditProfilePopupOpen(true)
+    setEditProfilePopupOpen(true)
 
   }
 
 
   function handleAddPlaceClick() {
-    isAddPlacePopupOpen(true)
+    setAddPlacePopupOpen(true)
   }
   function closeAllPopups() {
     selectedCard(null)
-    isAddPlacePopupOpen(false)
-    isInfoTooltipPopupOpen(false)
-    isEditProfilePopupOpen(false)
-    isEditAvatarPopupOpen(false)
+    setAddPlacePopupOpen(false)
+    setInfoTooltipPopupOpen(false)
+    setEditProfilePopupOpen(false)
+    setEditAvatarPopupOpen(false)
   }
   function handleUpdateUser(userInfo) {
     api.setUserInfo(userInfo)
@@ -121,28 +121,31 @@ function App(props) {
       });
   }
   function handleRegResult(result) {
-    isInfoTooltipPopupOpen(true)
-    if (result === 201) {
-      setRegResult(true)
-    } else { setRegResult(false) }
+    setInfoTooltipPopupOpen(true)
+    setRegResult(result)
+
 
   }
-  function handleLogin() {
-    if (localStorage.getItem('jwt')) {
-      let jwt = localStorage.getItem('jwt');
-      authApi.jwtCheck(jwt).then((res) => {
-        if (res) {
-          console.log(res)
-          localStorage.setItem('_id', res.data._id);
-          localStorage.setItem('email', res.data.email);
-          // авторизуем пользователя
+  function handleLogin(email, password) {
+    authApi.auth(email, password)
+      .then((data) => {
+        console.log(data)
+        if (data.token) {
+          localStorage.setItem('jwt', data.token);
+          localStorage.removeItem('regEmail');
           setLoggedIn(true)
-          props.history.push("/");
-
-          return res
+          setUserEmail(email)
+          props.history.push('/')
         }
-      });
-    };
+      })
+  }
+
+  function handleRegister(email, password) {
+    authApi.register(email, password).then(() => {
+      handleRegResult(true)
+      props.history.push('/sign-in')
+      localStorage.setItem('regEmail', email)
+    }).catch(() => handleRegResult(false));
   }
 
   const handleCardLike = (card) => {
@@ -150,9 +153,7 @@ function App(props) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
       console.log(newCard)
-      setCards(
-        cards.map((c) => c._id === card._id ? newCard : c)
-      )
+      setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
     })
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
@@ -209,13 +210,13 @@ function App(props) {
 
       <div className="root">
         <div className="page">
-          <Header loggedIn={loggedIn} email={localStorage.getItem('email')} setLoggedIn={setLoggedIn} />
+          <Header loggedIn={loggedIn} email={userEmail} setLoggedIn={setLoggedIn} />
           <Switch>
             <Route path="/sign-up">
-              <Register handleRegResult={handleRegResult} />
+              <Register handleRegResult={handleRegResult} onRegister={handleRegister} />
             </Route>
             <Route path="/sign-in">
-              <Login handleLogin={handleLogin} />
+              <Login onLogin={handleLogin} />
             </Route>
             <Route exact path="/">
               <ProtectedRoute
@@ -229,10 +230,10 @@ function App(props) {
           </Switch>
 
           <Footer />
-          <EditProfilePopup isOpen={editProfilePopupOpen ? true : false} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-          <EditAvatarPopup isOpen={editAvatarPopupOpen ? true : false} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-          <AddPlacePopup isOpen={addPlacePopupOpen ? true : false} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-          <InfoTooltip isOpen={infoTooltipPopupOpen} onClose={closeAllPopups} result={regResult} />
+          <EditProfilePopup isOpen={isEditProfilePopupOpen ? true : false} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+          <EditAvatarPopup isOpen={isEditAvatarPopupOpen ? true : false} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+          <AddPlacePopup isOpen={isAddPlacePopupOpen ? true : false} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
+          <InfoTooltip isOpen={isInfoTooltipPopupOpen} onClose={closeAllPopups} result={regResult} />
           <PopupWithForm name='Confirm' title='Вы уверены?' buttonTitle='Да' onClose={closeAllPopups} />
           <ImagePopup card={selectCard} onClose={closeAllPopups} />
         </div>

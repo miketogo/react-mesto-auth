@@ -15,7 +15,7 @@ class AuthApi {
         "email": email
       }
       )
-    })
+    }).then(this._checkResponse)
   };
 
   auth(email, password) {
@@ -30,7 +30,7 @@ class AuthApi {
         "email": email
       }
       )
-    })
+    }).then(this._checkResponse)
   }
 
   jwtCheck(jwt) {
@@ -40,10 +40,17 @@ class AuthApi {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${jwt}`
       }
-    }).then(res => res.json())
-      .then(data => data)
+    }).then(this._checkResponse)
 
   }
+
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка ${res.status}`);
+  }
+
 }
 
 const authApi = new AuthApi({

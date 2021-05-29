@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import authApi from '../utils/authApi';
 
 
 
@@ -29,18 +28,7 @@ function Login(props) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
     console.log(email, password)
-    authApi.auth(email, password)
-      .then((response => response.json()))
-      .then((data) => {
-        console.log(data.token)
-        if (data.token) {
-          localStorage.setItem('jwt', data.token);
-          props.handleLogin();
-          localStorage.removeItem('regEmail');
-          return data;
-        }
-      })
-      .catch(err => console.log(err))
+    props.onLogin(email, password)
   };
 
   return (
