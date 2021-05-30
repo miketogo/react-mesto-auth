@@ -45,6 +45,8 @@ function App(props) {
         // авторизуем пользователя
         setLoggedIn(true)
         props.history.push("/");
+      }).catch((err) => {
+        console.log(err); // выведем ошибку в консоль
       });
     };
   }, [])
@@ -55,7 +57,7 @@ function App(props) {
       .then((result) => {
         setCards(result)
       }).catch((err) => {
-        console.log(err); // выведем ошибку в консоль
+        console.log(err);
       });
   }, [])
 
@@ -137,7 +139,9 @@ function App(props) {
           setUserEmail(email)
           props.history.push('/')
         }
-      })
+      }).catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      });
   }
 
   function handleRegister(email, password) {
@@ -145,7 +149,10 @@ function App(props) {
       handleRegResult(true)
       props.history.push('/sign-in')
       localStorage.setItem('regEmail', email)
-    }).catch(() => handleRegResult(false));
+    }).catch((err) => {
+      console.log(err)
+      handleRegResult(false)
+    });
   }
 
   const handleCardLike = (card) => {
