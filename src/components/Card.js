@@ -23,7 +23,7 @@ function Card(props) {
 
 
   return (
-    <div id="element" key={props.card._id}>
+    <div key={props.card._id}>
       <div className="element">
         <button className={cardDeleteButtonClassName} onClick={handleDeleteClick} type="button" aria-label="Удалить"></button>
         <img onClick={handleClick} className="element__image" src={props.card.link} alt={props.card.name} />
